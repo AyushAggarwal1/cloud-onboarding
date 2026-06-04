@@ -319,10 +319,19 @@ locals {
 }
 
 ########################################################
+# Resource Provider Registration
+########################################################
+
+resource "azurerm_resource_provider_registration" "managed_services" {
+  name = "Microsoft.ManagedServices"
+}
+
+########################################################
 # Shared Lighthouse Registration Definition
 ########################################################
 
 resource "azurerm_lighthouse_definition" "shared_lighthouse_definition" {
+  depends_on = [azurerm_resource_provider_registration.managed_services]
   name               = "${var.offer_name} - ${var.accuknox_verification_token}"
   description        = var.offer_description
   managing_tenant_id = var.managing_tenant_id
